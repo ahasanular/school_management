@@ -1,0 +1,58 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Facility Details{% endblock %}
+
+{% block body %}
+<h1 class="m-5 mx-auto neuEffectNonHover" style="max-width:25%">Facility Details</h1>
+
+<div class="container">
+    <div class="row justify-content-center neuEffect" id="card">
+
+    </div>
+</div>
+
+<script>
+    $('#home').removeClass('active')
+    $('#facilities').addClass('active')
+
+    var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+    var path = window.location.pathname.split('/')
+
+    var api_url = "http://127.0.0.1:8000/facilities/facility_details_api/"+path[3]+"/"
+
+    $.ajax({
+            type: "GET",
+            url: api_url,
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data) {
+                //console.log("data")
+                //console.log(data)
+                $('#card').html(`
+                   <div class="col m-5">
+                    <img src="${data.img}" alt="${data.full_name}" class="rounded-circle mt-2" height="350" width="350"/>
+                   </div>
+                   <div class="col m-5 neuEffectNonHover">
+                    <div class="row"><h2>${data.name}</h2></div>
+                    <br><br>
+                    <div class="row"><h3>Descriptions</h3></div>
+                    <br>
+                    <div class="row"><h4>${data.details}</h4></div>
+                   </div>
+                `)
+            },
+            error:function(data){
+                //console.log(data)
+                $('#card').html(`
+                    <h1>Please Sign In To View Any Info</h1>
+                    <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                `)
+            }
+        });
+</script>
+
+{% endblock %}

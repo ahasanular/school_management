@@ -1,0 +1,102 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Teachers{% endblock %}
+
+{% block body %}
+
+<h1 class="m-5 mx-auto" style="max-width: 25%;">Teacher List</h1>
+
+<div class="" id="filter-salary">
+
+</div>
+
+<div class="row" id="card">
+
+</div>
+
+    <script>
+        $('#home').removeClass('active')
+        $('#teachers').addClass('active')
+        var allCardInfo;
+
+        var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/teachers/teacher_list_api/",
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data) {
+                //console.log(data)
+                allCardInfo = data
+
+                $('#filter-salary').html(`
+                    <span class=""><strong>Select min Salary to Filter</strong></span>
+                    <br>
+                    <select class="neuEffectNonHover input-lg" id="background" onchange="salaryFilter(this)" style="min-width: 150px; text-align: center">
+                        <option value="0">&#2547 0</option>
+                        <option value="5000">&#2547 5000</option>
+                        <option value="10000">&#2547 10000</option>
+                        <option value="15000">&#2547 15000</option>
+                        <option value="20000">&#2547 20000</option>
+                        <option value="25000">&#2547 25000</option>
+                        <option value="30000">&#2547 30000</option>
+                    </select>
+                    <br><br><br>
+                `)
+
+                for(var i = 0; i < data.length; i++){
+                    $('#card').append(`
+                        <a class ="col neuEffect-small m-3 p-5" href="/teachers/details/${data[i].slug}">
+                            <div class="">
+                                <span><h3>${ data[i].id }</h3></span>
+                                <span><img src="${ data[i].img }" alt="${data[i].full_name}" class="rounded-circle mt-2" height="100" width="100"></span>
+                                <span><h3>${ data[i].full_name }</h3></span>
+                                <span><h6>${ data[i].gender }</h6></span>
+                                <span><h6>${ data[i].email }</h6></span>
+                                <span><h6>${ data[i].phone }</h6></span>
+                                <span><h6>${ data[i].address }</h6></span>
+                                <span><h3>&#2547 ${ data[i].salary }/m</h3></span>
+                            </div>
+                        </a>
+                    `)
+                }
+                //console.log(data)
+            },
+            error:function(data){
+                //console.log(data)
+                $('#card').html(`
+                    <h1>Please Sign In To View Any Info</h1>
+                    <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                `)
+            }
+        });
+
+        function salaryFilter(salaryOption){
+            $('#card').empty()
+            for(let i = 0 ; i < allCardInfo.length; i++){
+                if(allCardInfo[i].salary >= salaryOption.value){
+                    $('#card').append(`
+                        <a class ="col neuEffect-small m-3 p-5" href="/teachers/details/${allCardInfo[i].full_name}">
+                            <div class="">
+                                <span><h3>${ allCardInfo[i].id }</h3></span>
+                                <span><img src="${ allCardInfo[i].img }" alt="${allCardInfo[i].full_name}" class="rounded-circle mt-2" height="100" width="100"></span>
+                                <span><h3>${ allCardInfo[i].full_name }</h3></span>
+                                <span><h6>${ allCardInfo[i].gender }</h6></span>
+                                <span><h6>${ allCardInfo[i].email }</h6></span>
+                                <span><h6>${ allCardInfo[i].phone }</h6></span>
+                                <span><h6>${ allCardInfo[i].address }</h6></span>
+                                <span><h3>&#2547 ${ allCardInfo[i].salary }/m</h3></span>
+                            </div>
+                        </a>
+                    `)
+                }
+            }
+        }
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}sign in{% endblock %}
+
+{% block body %}
+
+<h1 class="m-5">Sign In</h1>
+
+<div class="neuEffectNonHover justify-content-center mx-auto" style="max-width: 70%" id="card">
+    <h1 id="feedback" class="m-5 pt-5" style="color: tomato;"></h1>
+    <div class="row justify-content-center">
+        {% csrf_token %}
+        <label class="mt-3" for="email">Email / Username / Phone</label><br>
+        <input class="neuEffect w-25" type="email" id="email" name="email" value=""><br>
+        <label class="mt-3" for="password">Password</label><br>
+        <input class="neuEffect w-25" type="password" id="password" name="password" value=""><br>
+    </div>
+
+    <input class="m-5 btn btn-lg neuEffect " type="submit" value="Log In" id="log-in"><br>
+
+    <label class="mt-5" for="create-acc">Don't Have a account?</label><br>
+    <a class="btn btn-md neuEffect" id="create-acc" href="/sign_up/">Create One</a><br><br>
+</div>
+
+    <script>
+        $('#home').removeClass('active')
+        $('#signIn').addClass('active')
+
+        $('#log-in').click(function(){
+            input_data = {}
+            input_data['email'] = $('#email').val()
+            input_data['password'] = $('#password').val()
+
+            //console.log(input_data)
+
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:8000/sign_in_api/",
+                data: JSON.stringify(input_data),
+                headers: {"X-CSRFToken": '{{csrf_token}}'},
+                success: function(data){
+                    //console.log("success checking")
+                    //console.log(data.access)
+                    if(data.status == 200){
+
+                        document.cookie='token='+data.access+';path=/'
+                        document.cookie='username='+data.user_name+';path=/'
+                        document.cookie='fullname='+data.full_name+';path=/'
+                        document.cookie='img='+data.img+';path=/'
+                        document.cookie='account_type='+data.account_type+';path=/'
+
+                        var x = document.cookie
+                                  .split(';')
+                                  .map(cookie => cookie.split('='))
+                                  .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+                        // alert("Now something coming up")
+                        // alert(x.fullname)
+
+                        if(localStorage.getItem('lastUrl') != null && localStorage.getItem('lastUrl') != "http://127.0.0.1:8000/sign_in/" && localStorage.getItem('lastUrl') != "http://127.0.0.1:8000/sign_up/"){
+                            window.location = localStorage.getItem('lastUrl')
+                            localStorage.removeItem('lastUrl')
+                        }
+                        else{
+                            window.location = "http://127.0.0.1:8000/"
+                        }
+                    }
+                    else{
+                        $('#feedback').empty()
+                        $('#feedback').html(data.message)
+                    }
+                },
+                error: function(data){
+                    console.log("error checking")
+                    console.log(data)
+                    $('#card').html('<h1 class="m-5" style="color: tomato;">Something Went Wrong! <br> Please Try Again</h1>')
+                }
+            });
+
+        })
+
+    </script>
+
+{% endblock %}

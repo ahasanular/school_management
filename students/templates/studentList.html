@@ -1,0 +1,59 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Students{% endblock %}
+
+{% block body %}
+
+<h1 class="m-5">Student List</h1>
+
+<div class="row" id="card">
+
+</div>
+
+    <script>
+        $('#home').removeClass('active')
+        $('#students').addClass('active')
+        var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/students/student_list_api/",
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data){
+                //console.log("success checking")
+                //console.log(data)
+
+
+                for(let i = 0; i < data.length; i++){
+                    $('#card').append(`
+                        <a class ="col neuEffect-small m-3 p-5" href="/students/details/${ data[i].slug }">
+                        <div class=" ">
+                            <span><h3>${ data[i].id }</h3></span>
+                            <span><img src="${ data[i].img }" alt="${ data[i].full_name }" class="rounded-circle mt-2" height="100" width="100"></span>
+                            <span><h3><strong>${ data[i].full_name }</strong></h3></span>
+                            <span><h6>${ data[i].gender }</h6></span>
+                            <span><h6>${ data[i].email }</h6></span>
+                            <span><h6>${ data[i].phone }</h6></span>
+                            <span><h6>${ data[i].address }</h6></span>
+                        </div>
+                        </a>
+                    `)
+                }
+            },
+            error: function(data){
+                //console.log("Error checking")
+                //console.log(data)
+                //console.log(localStorage.getItem('token'))
+                $('#card').html(`
+                    <h1>Please Sign In To View Any Info</h1>
+                    <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                `)
+            }
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,236 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}posts{% endblock %}
+
+
+{% block body %}
+<div id="post-main-body">
+    <div class="neuEffectNonHovers">
+        <form enctype="multipart/form-data" id="post_form" method="POST" action="#">
+            {% csrf_token %}
+            <div class="col">
+                <div class="m-5">
+                    <label for="post_text"><h3></h3></label><br>
+                    <textarea class="neuEffect mt-2 p-3" rows="3" cols="69" id="post_text" name="post_text" placeholder="Write something to share..." value="" ></textarea>
+                    <input class="neuEffect mx-auto m-5" style="max-width: 100%" type="file" pattern="/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)" accept="image/png, image/gif, image/jpeg" id="post_picture" name="post_picture" placeholder="Image" />
+                </div>
+<!--                <input class="btn btn-lg neuEffect" type="submit" id="post_submit" value="Post"><br><br>-->
+                <div>
+                    <button class="btn btn-lg neuEffect btn-secondary text-dark" type="submit">
+                        Post
+                    </button>
+                </div>
+                <hr class="mx-auto" style="max-width: 39%; height: 2px;">
+            </div>
+        </form>
+    </div>
+
+    <div class="" >
+        <h2><strong>Posts</strong></h2>
+        <div class="col m-5 mx-auto" id="card" style="max-width: 39%;">
+
+        </div>
+    </div>
+</div>
+
+    <script>
+    $('#home').removeClass('active')
+    $('#posts').addClass('active')
+
+    var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+    if(x.token == null){
+        $('#post-main-body').html(`
+            <h1>Please Sign In To View Any Info</h1>
+            <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+        `)
+    }
+
+    monthNameAra = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',];
+
+    $.ajax({
+        type: "GET",
+        url: "http://127.0.0.1:8000/posts/post_list_api/",
+        headers: {Authorization: 'Bearer ' + x.token},
+        data: "",
+        success: function(data){
+            // console.log("Success checking")
+            // console.log(data)
+
+            var isPM = "AM";
+            var account_type;
+
+            for(var i = data.length-1; i >= 0; i--){
+                if (data[i].text == null){data[i].text = ''}
+                if(data[i].student != null ){
+                    post_by_img = data[i].student.img
+                    account_type = 'students'
+                    slug = data[i].student.slug
+                    person = data[i].student
+                }
+                else if(data[i].teacher != null ){
+                    post_by_img = data[i].teacher.img
+                    account_type = 'teachers'
+                    slug = data[i].teacher.slug
+                    person = data[i].teacher
+                }
+
+                const diffDays = (date, otherDate) => Math.abs(otherDate - date) / (1000 * 60 * 60 * 24);
+                difference = diffDays(new Date(data[i].created_at), new Date())
+
+                if(difference < 1){
+                    difference = difference * 24
+                    if(difference < 1){
+                        difference = difference * 60
+                        if(difference < 1){
+                            postCreatedAt = "A few seconds Ago"
+                        }
+                        else{
+                            postCreatedAt = Math.floor(difference) + " min Ago"
+                        }
+                    }
+                    else{
+                        postCreatedAt = Math.floor(difference) + " hour Ago"
+                    }
+                }
+                else{
+                    if(difference <= 7){
+                        postCreatedAt = Math.floor(difference) + " days Ago"
+                    }
+                    else{
+                        dateTime = data[i].created_at.split('T')
+                        date = dateTime[0].split('-')
+                        time = dateTime[1].split(':')
+                        postCreatedAt = date[2] + " " + monthNameAra[parseInt(date[1])] + " " + date[0]
+                        if(time[0] > 12){
+                            time[0] = time[0]-12
+                            isPM = "PM"
+                        }
+                        postCreatedAt = postCreatedAt + " " + time[0] + ":" + time[1] + " " + isPM
+                    }
+                }
+
+                $('#card').append(`
+                    <div class="p-3 col neuEffect mx-auto">
+                        <div class="p-3 row">
+                            <div class="mx-auto" style="max-width: 100%;">
+                                <div class="d-flex justify-content-start">
+                                    <div class="">
+                                        <span><a href="/${account_type}/details/${ slug }/"><img src="${ post_by_img }" alt="" class="rounded-circle" height="35" width="35"></a></span>
+                                    </div>
+                                    <div class="ps-3 text-left">
+                                        <span class=""id="post_list_name"><strong><a href="/${account_type}/details/${ slug }/"> ${ person.full_name }</a></strong></span>
+                                        <br><span class=" text-secondary fa fa-clock-o"> ${ postCreatedAt }</span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="p-3" style="outline: 1px solid #c3c7cb">
+                                    <div class="text-left">
+                                        <p id="post_list_content" class="ps-3 text-left"><strong>${data[i].text}</strong></p>
+                                    </div>
+                                    <div class="bg-dark">
+                                        <a href="${data[i].img}"><img class='post-image' src="${ data[i].img }" onerror="this.style.display='none'" style="max-width: 100%;"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mb-5 mx-auto" style="max-width: 100%;">
+                        <div class="col neuEffect text-center btn btn-lg fa fa-thumbs-up" id="${data[i].id}" onclick="count_like(this)" style="font-size: 18px;">
+                               ${data[i].total_likes}
+                        </div>
+                        <div class="col neuEffect text-center">
+                            <button class="btn btn-lg fa fa-comment" style="font-size: 18px;"></button>
+                        </div>
+                        <div class="col neuEffect text-center">
+                            <button class="btn btn-lg fa fa-share" style="font-size: 18px;"></button>
+                        </div>
+                    </div>
+                `)
+                if(data[i].post_like.length != 0){
+                    id = '#'+data[i].id
+                    $(id).attr('onclick', '')
+                    $(id).css('background-color', '#c3c7cb')
+                }
+            }
+        },
+        error: function(data){
+            console.log("Error checking")
+            console.log(data)
+        }
+    })
+
+
+
+        $('#post_form').submit(function(event){
+            event.preventDefault()
+            console.log(event)
+            var data_str = new FormData(document.getElementById('post_form'));
+            data_str.append('account_type', x.account_type)
+            console.log("data_str")
+            console.log(data_str.value)
+            var image = document.forms["post_form"]["post_picture"].value;
+            console.log(image)
+            image = image.split('.')
+            //if(image[(image.length)-1] === 'jpg'){
+                console.log("Test")
+                $.ajax({
+                    type: "POST",
+                    headers: {Authorization: 'Bearer ' + x.token},
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    url: "http://127.0.0.1:8000/posts/create_post_api/",
+                    data: data_str,
+                    success: function(data){
+                        console.log("Success checking")
+                        console.log(data)
+                        window.location.href = '/posts/'
+                    },
+                    error: function(data){
+                        alert("Error checking")
+                        alert(data)
+                    }
+                });
+            //}
+        })
+
+
+        function count_like(the_post){
+            // alert("click")
+            input_data = {}
+            input_data['id'] = the_post.id
+            console.log("like print from web")
+            console.log(input_data)
+
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:8000/posts/likes_api/",
+                headers: {Authorization: 'Bearer ' + x.token},
+                data: JSON.stringify(input_data),
+                success: function(data){
+                    if(data.status == 200){
+                        console.log("Success checking likes")
+                        console.log(data)
+                        id = '#'+data.id
+                        $(id).attr('onclick', '')
+                        $(id).css('background-color', '#c3c7cb')
+                        // $(id).removeClass('fa').removeClass('fa-thumbs-up')
+                        $(id).html(`<span class="m-3">${data.likes}</span>`)
+                    }
+
+                },
+                error: function(data){
+                    console.log("Error checking")
+                    console.log(data)
+                }
+            });
+        }
+    </script>
+
+{% endblock %}

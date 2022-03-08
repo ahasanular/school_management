@@ -1,0 +1,23 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Teacher Index{% endblock %}
+
+{% block body %}
+
+<h1 class="m-5">Teacher Index</h1>
+<h4>Ongoing...</h4>
+<a class="btn btn-lg neuEffect" href="/teachers/teacher_list/">Teacher List</a>
+
+<div id="test_script">
+
+</div>
+
+
+    <script>
+        $('#home').removeClass('active')
+        $('#teachers').addClass('active')
+        //document.getElementById('home').classList.remove('active');
+        //document.getElementById('students').classList.add('active');
+    </script>
+
+{% endblock %}

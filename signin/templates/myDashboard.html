@@ -1,0 +1,71 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+<h1 class="m-5">My Dashboard</h1>
+
+<div class="neuEffect mx-auto p-2" id="card" style="max-width: 50%">
+
+</div>
+
+    <script>
+        $('#home').removeClass('active')
+        $('#nameAndDp').addClass('active')
+
+        var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+        input_data = {}
+        input_data['account_type'] = localStorage.getItem('account_type')
+        var api_url = "http://127.0.0.1:8000/sign_in/my_account_api/" + x.fullname + "/"
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/sign_in/my_account_api/" + x.fullname + "/",
+            headers: {Authorization : 'Bearer ' + x.token},
+            data: "",
+            success: function(data){
+                //console.log("succes checking")
+                //console.log(data)
+                if(data.status == 200){
+                    $('#card').append(`
+                        <div class="col m-5">
+                            <img src="${data.img}" alt="${data.full_name}" class="rounded-circle mt-2" height="350" width="350"/>
+                        </div>
+                        <div class="col m-5 neuEffectNonHover">
+                            <div class="row pt-5"><h4>Name : ${data.full_name}</h4></div>
+                            <div class="row"><h4>Father's name : ${data.fathers_name}</h4></div>
+                            <div class="row"><h4>Mother's Name : ${data.mothers_name}</h4></div>
+                            <div class="row"><h4>Gender : ${data.gender}</h4></div>
+                            <div class="row"><h4>Religion : ${data.religion}</h4></div>
+                            <div class="row"><h4>DOB : ${data.birth_date}</h4></div>
+                            <div class="row"><h4>Email : ${data.email}</h4></div>
+                            <div class="row"><h4>Phone : ${data.phone}</h4></div>
+                            <div class="row"><h4>Address : ${data.address}</h4></div>
+                            <div class="row pb-5"><h4>blood-group : ${data.blood_group}</h4></div>
+                        </div>
+                    `)
+                }
+                else if(data.status == 400){
+                    console.log("Error Into success")
+                    console.log(data)
+                }
+
+            },
+            error: function(data){
+                //console.log(data)
+                $('#card').html(`
+                        <h1>Please Sign In To View Any Info</h1>
+                        <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                    `)
+                $('#card').removeClass('neuEffect')
+            }
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'layout/base.html' %}
+
+{% block body %}
+    <div class="row" id="mainBox">
+        <div id="postBox" class="col m-3">
+            <div class="neuEffectNonHover">
+                <div class="row">
+                    <div class="" ><h2 class=""><strong>Posts</strong></h2></div>
+                    <div class="col" ><a href="/posts/" class="btn btn-md neuEffect me-5 active" style="float: right"><strong>See all..</strong></a></div>
+                </div>
+
+                <div class="col m-3 mx-auto" id="postCard" style="max-width: 80%;">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="studentBox" class="col m-3">
+            <div class="neuEffectNonHover">
+                <div class="row">
+                    <div class="" ><h2 class="" ><strong id="std_or_teach">Students</strong></h2></div>
+                    <div class="col" ><a href="/students/student_list/" class="btn btn-md neuEffect me-5 active" style="float: right"><strong>See all..</strong></a></div>
+                </div>
+
+                <div class="col m-3 mx-auto" id="studentCard" style="max-width: 80%;">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="facilityBox" class="col m-3">
+            <div class="neuEffectNonHover">
+                <div class="row">
+                    <div class="" ><h2 class=""><strong>Facilities</strong></h2></div>
+                    <div class="col" ><a href="/facilities/" class="btn btn-md neuEffect me-5 active" style="float: right"><strong>See all..</strong></a></div>
+                </div>
+
+                <div class="col m-3 mx-auto" id="facilityCard" style="max-width: 80%;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/posts/post_list_api/",
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data){
+                // console.log("Success checking")
+                // console.log(data)
+                for(var i = data.length-1; i >= data.length-5; i--){
+                    if(data[i].student != null){
+                        person = data[i].student
+                    }
+                    else if(data[i].teacher != null){
+                        person = data[i].teacher
+                    }
+                    $('#postCard').append(`
+                        <div class="m-3 p-3 col mx-auto text-left" style="outline: 1px solid #c3c7cb">
+                            <div class="row">
+                                <div>
+                                    <h4 id="post_list_name"><strong>${person.full_name}</strong></h4>
+                                    <p id="post_list_content" class="p-2 " ><strong>${data[i].text}</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    `)
+                }
+                $('#postCard').append(`<hr>`)
+            },
+            error: function(data){
+                console.log("Error checking")
+                console.log(data)
+            }
+        })
+
+<!--        making student or teacher card in homepage-->
+
+        let list_api_url = "http://127.0.0.1:8000/students/student_list_api/";
+
+        if(x.account_type == 'Student'){
+            $('#std_or_teach').html('Student')
+            list_api_url = "http://127.0.0.1:8000/students/student_list_api/"
+        }
+        else if(x.account_type == 'Teacher'){
+            $('#std_or_teach').html('Teacher')
+            list_api_url = "http://127.0.0.1:8000/teachers/teacher_list_api/"
+        }
+
+        $.ajax({
+            type: "GET",
+            url: list_api_url,
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data){
+                // console.log("Success checking")
+                // console.log(data.details)
+                    for(var i = 0; i < data.length-2; i++){
+                        $('#studentCard').append(`
+                            <div class="m-3 p-3 col mx-auto text-left" style="outline: 1px solid #c3c7cb">
+                                <div class="row">
+                                    <div>
+                                        <h4 id="post_list_name"><strong>${ data[i].full_name }</strong></h4>
+                                        <p id="post_list_content" class="p-2">
+                                            <strong class="fa fa-envelope"> ${data[i].email} &nbsp;&nbsp;&nbsp;</strong>
+                                            <strong class="fa fa-phone"> ${data[i].phone} &nbsp;&nbsp;&nbsp;</strong>
+                                            <strong class="fa fa-venus-mars"> ${data[i].gender} &nbsp;&nbsp;&nbsp;</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        `)
+                    $('#studentCard').append(`<hr>`)
+                }
+            },
+            error: function(data){
+                console.log("Error checking")
+                console.log(data)
+            }
+        })
+
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/facilities/facility_list_api/",
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data){
+                // console.log("Success checking")
+                // console.log(data)
+                for(var i = 0; i < data.length-2; i++){
+                    $('#facilityCard').append(`
+                        <div class="m-3 p-3 col mx-auto text-left" style="outline: 1px solid #c3c7cb">
+                            <div class="row">
+                                <div>
+                                    <h4 id="post_list_name"><strong>${data[i].name}</strong></h4>
+                                    <p id="post_list_content" class="p-2">
+                                        <img src="${data[i].img}" class="rounded-circle" height="100" width="100">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `)
+                }
+                $('#facilityCard').append(`<hr>`)
+            },
+            error: function(data){
+                console.log("Error checking")
+                console.log(data)
+            }
+        })
+    </script>
+{% endblock %}

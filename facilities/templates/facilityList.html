@@ -1,0 +1,51 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Facilities{% endblock %}
+
+{% block body %}
+
+<h1 class="m-5">Facility List</h1>
+
+<div class="row" id="card">
+
+</div>
+
+    <script>
+        $('#home').removeClass('active')
+        $('#facilities').addClass('active')
+
+        var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/facilities/facility_list_api/",
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data) {
+                for(var i = 0; i < data.length; i++){
+                    $('#card').append(`
+                        <a class ="col neuEffect-small m-3 p-5" id="${data[i].id}" href="/facilities/details/${data[i].id}/">
+                            <div class="">
+                                <span><h3>${ data[i].id }</h3></span>
+                                <span><img src="${ data[i].img }" alt="${data[i].name}" class="rounded-circle mt-2" height="100" width="100"></span>
+                                <span><h3>${ data[i].name }</h3></span>
+                            </div>
+                        </a>
+                    `)
+                }
+                //console.log(data)
+            },
+            error:function(data){
+                //console.log(data)
+                $('#card').html(`
+                    <h1>Please Sign In To View Any Info</h1>
+                    <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                `)
+            }
+        });
+    </script>
+
+{% endblock %}

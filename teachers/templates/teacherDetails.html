@@ -1,0 +1,87 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Teacher Details{% endblock %}
+
+{% block body %}
+<h1 class="m-5 mx-auto neuEffectNonHover" style="max-width:25%">Teacher Details</h1>
+
+<div class="container">
+    <div class="row justify-content-center neuEffect" id="card" style="max-width: 100%;">
+
+    </div>
+</div>
+
+<script>
+    $('#home').removeClass('active')
+    $('#teachers').addClass('active')
+
+    var x = document.cookie
+                .split(';')
+                .map(cookie => cookie.split('='))
+                .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
+
+    var path = window.location.pathname.split('/')
+    var url = "http://127.0.0.1:8000/teachers/teacher_details_api/"+path[3]+"/"
+    $.ajax({
+            type: "GET",
+            url: url,
+            headers: {Authorization: 'Bearer ' + x.token},
+            data: "",
+            success: function(data) {
+                $('#card').append(`
+                    <div class="col m-5">
+                        <img src="${data.img}" alt="${data.full_name}" class="rounded-circle mt-2" height="350" width="350"/>
+                    </div>
+                    <div class="col m-5 neuEffectNonHover" id="info">
+                        <div class="row mt-5"><h4>Name : ${data.full_name}</h4></div>
+                        <div class="row"><h4>Father's name : ${data.fathers_name}</h4></div>
+                        <div class="row"><h4>Gender : ${data.gender}</h4></div>
+                        <div class="row"><h4>Religion : ${data.religion}</h4></div>
+                        <div class="row"><h4>DOB : ${data.birth_date}</h4></div>
+                        <div class="row"><h4>Email : ${data.email}</h4></div>
+                        <div class="row"><h4>Phone : ${data.phone}</h4></div>
+                        <div class="row"><h4>Address : ${data.address}</h4></div>
+                        <div class="row"><h4>blood-group : ${data.blood_group}</h4></div>
+                        <div class="row"><h4>Nationality : ${data.nationality}</h4></div>
+                    </div>
+                    <br>
+                `)
+                if(data.teacherExperience.length != 0){
+                    $('#info').append(`
+                        <h3><strong>Experiences</strong></h3>
+                        <div id="exp_field">
+                            <div class="row">
+                                <div class="col"><strong>Experience Name</strong></div>
+                                <div class="col"><strong>Starting Date</strong></div>
+                                <div class="col"><strong>Ending Date</strong></div>
+                                <div class="col"><strong>Designation</strong></div>
+                                <div class="col"><strong>Speciality</strong></div>
+                            </div>
+                        </div>
+                    `)
+                    for(var i = 0; i < data.teacherExperience.length; i++){
+
+                        $('#exp_field').append(`
+                            <div class="row">
+                                <div class="col">${data.teacherExperience[i].exp_name}</div>
+                                <div class="col">${data.teacherExperience[i].exp_start_date}</div>
+                                <div class="col">${data.teacherExperience[i].exp_end_date}</div>
+                                <div class="col">${data.teacherExperience[i].exp_designation}</div>
+                                <div class="col">${data.teacherExperience[i].speciality}</div>
+                            </div>
+                        `)
+                    }
+                }
+
+            },
+            error:function(data){
+                //console.log(data)
+                $('#card').html(`
+                    <h1>Please Sign In To View Any Info</h1>
+                    <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                `)
+            }
+        });
+</script>
+
+{% endblock %}
