@@ -121,7 +121,6 @@ class SignUp(CreateAPIView):
                     user.last_name = name
                 user.email = data['email']
                 user.password = make_password(data['password'])
-                user.is_active = True
 
                 otp = secrets.token_hex(50)
 
