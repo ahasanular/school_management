@@ -93,21 +93,13 @@ class SignInApi(CreateAPIView):
 
                     token = RefreshToken.for_user(user)
                     feedback = {}
-                    print("yo")
                     feedback['status']=HTTP_200_OK
-                    print("yo")
                     feedback['user_name']=user.username
-                    print("yo")
                     feedback['full_name']=userObject.full_name
-                    print("yo")
                     feedback['account_type']=account_type
-                    print("yo")
                     feedback['img']=str(userObject.img.url)
-                    print("yo")
                     feedback['access']=str(token.access_token)
-                    print("yo")
                     feedback['refresh']=str(token)
-                    print("yo")
                     print(feedback)
                     return Response(feedback)
 

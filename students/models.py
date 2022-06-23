@@ -32,7 +32,7 @@ class Student(SchoolManagementModel):
             student_ex = Student.objects.filter(slug=slug).exists()
             if student_ex:
                 hexa = secrets.token_hex(6)
-                self.slug = slug + "-Xyb90d-" + hexa
+                self.slug = slug + "-Xy0d-" + hexa
             else:
                 self.slug = slug
             super(Student, self).save(*args, **kwargs)

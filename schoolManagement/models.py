@@ -22,6 +22,7 @@ from django.utils import timezone
 def history_time_info(sender, instance, *args, **kwargs):
     if instance._state.adding:
         instance.created_at = timezone.now()
+
     else:
         instance.modified_at = timezone.now()
         if instance.is_archived and not instance.archived_at:

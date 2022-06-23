@@ -78,6 +78,8 @@ WSGI_APPLICATION = 'schoolManagement.wsgi.application'
 # }
 
 
+# This is for use Mysql Database
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -96,6 +98,18 @@ DATABASES = {
     }
 }
 
+# This is for use Mongo atlas Database
+
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'djongo',
+#             'NAME': 'School_management',
+#             'ENFORCE_SCHEMA': False,
+#             'CLIENT': {
+#                 'host': 'mongodb+srv://ahasanul-ar:2444@cluster0.sjrfd.mongodb.net/?retryWrites=true&w=majority'
+#             }
+#         }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

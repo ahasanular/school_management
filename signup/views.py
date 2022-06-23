@@ -7,15 +7,15 @@ from teachers.models import Teacher
 from django.contrib.auth.models import User, Group
 
 
-
 def signUp(request):
     return render(request, 'signUp.html')
+
 
 def verification(request, account_type, email, otp):
     return render(request, 'verification.html')
 
 
-#api
+# api
 
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
@@ -23,18 +23,17 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UN
 from django.contrib.auth.hashers import make_password
 import json
 
-
-
-#full function to send a mail with otp
+# full function to send a mail with otp
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+
 def send_email(to, subject, body):
-    smtp_server='smtp.gmail.com'
-    smtp_port='465'
-    sender_email='projecttestmail8@gmail.com'
-    sender_password='projectTesting'
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = '465'
+    sender_email = 'projecttestmail8@gmail.com'
+    sender_password = 'projectTesting'
     server = None
     try:
         server = smtplib.SMTP_SSL(smtp_server, smtp_port)
@@ -44,7 +43,6 @@ def send_email(to, subject, body):
         msg['From'] = sender_email
         msg['To'] = to
         msg['Subject'] = subject
-
 
         html = """\
         <html>
@@ -56,11 +54,11 @@ def send_email(to, subject, body):
             </body>
         </html>
         """
-        msg.attach(MIMEText(html,'html'))
+        msg.attach(MIMEText(html, 'html'))
         server.sendmail(
             from_addr=sender_email,
             to_addrs=to,
-            msg = msg.as_string())
+            msg=msg.as_string())
         print("Mail Send")
     except Exception as ex:
         print(str(ex))
@@ -68,9 +66,11 @@ def send_email(to, subject, body):
         if server != None:
             server.quit()
 
+
 def send_email_thread(to, subject, body):
-    thread = Thread(target=send_email,args=(to, subject, body))
+    thread = Thread(target=send_email, args=(to, subject, body))
     thread.start()
+
 
 class SignUp(CreateAPIView):
     permission_classes = []
@@ -101,7 +101,7 @@ class SignUp(CreateAPIView):
                 result['message'] = "Phone can't be NULL"
                 return Response(result)
             if 'password' not in data or data['password'] == '':
-                result ={}
+                result = {}
                 result['status'] = HTTP_400_BAD_REQUEST
                 result['message'] = "Password can't be NULL"
                 return Response(result)
@@ -115,12 +115,13 @@ class SignUp(CreateAPIView):
                 user.username = username[0]
                 name = data['full_name'].split(' ')
                 user.first_name = name[0]
-                user.last_name = name[1]
+                if len(name) > 1:
+                    name.remove(name[0])
+                    name = ' '.join(name)
+                    user.last_name = name
                 user.email = data['email']
                 user.password = make_password(data['password'])
-                user.is_active = False
-
-
+                user.is_active = True
 
                 otp = secrets.token_hex(50)
 
@@ -129,8 +130,10 @@ class SignUp(CreateAPIView):
 
                 if data['account_type'] == 'Student':
                     person_obj = Student()
+                    group = Group.objects.filter(name='Student_Group').first()
                 elif data['account_type'] == 'Teacher':
                     person_obj = Teacher()
+                    group = Group.objects.filter(name='Teacher_Group').first()
 
                 person_obj.user = user
 
@@ -156,12 +159,14 @@ class SignUp(CreateAPIView):
                     person_obj.img = data['profile_photo']
 
                 user.save()
+                user.groups.add(group)
+                user.save()
                 person_obj.save()
 
                 server_root = "http://127.0.0.1:8000/sign_up/verification/" + data['account_type'] + "/"
                 activition_link = server_root + data['email'] + "/" + otp + "/"
 
-                send_email_thread(data['email'], "Verification for " + data['account_type'] + " Sign Up", "To confirm your mail and activate your account please click in this LINK : " + activition_link)
+                # send_email_thread(data['email'], "Verification for " + data['account_type'] + " Sign Up", "To confirm your mail and activate your account please click in this LINK : " + activition_link)
 
                 result = {}
                 result['status'] = HTTP_200_OK
@@ -176,6 +181,7 @@ class SignUp(CreateAPIView):
                 else:
                     feedback = {}
                     feedback['message'] = "Un Active Account Found !"
+                    feedback['email'] = user.email
                     feedback['status'] = HTTP_401_UNAUTHORIZED
                     return Response(feedback)
 
@@ -188,6 +194,7 @@ class SignUp(CreateAPIView):
 
 class OtpCheck(CreateAPIView):
     permission_classes = []
+
     def put(self, request):
         try:
             data = json.loads(request.body)
@@ -249,9 +256,9 @@ class OtpCheck(CreateAPIView):
             return Response(feedback)
 
 
-
 class SendVerificationLink(CreateAPIView):
     permission_classes = []
+
     def post(self, request):
         try:
             data = json.loads(request.body)
@@ -291,7 +298,8 @@ class SendVerificationLink(CreateAPIView):
 
             activition_link = server_root + data['email'] + "/" + otp + "/"
 
-            send_email(data['email'], "Verification for Sign Up", "To confirm your mail and activate your account please click in this LINK : " + activition_link)
+            send_email(data['email'], "Verification for Sign Up",
+                       "To confirm your mail and activate your account please click in this LINK : " + activition_link)
 
             feedback = {}
             feedback['message'] = "Activation Mail Send !"

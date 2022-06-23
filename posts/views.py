@@ -151,3 +151,13 @@ class LikesCount(CreateAPIView):
             feedback['message'] = str(ex)
             feedback['status'] = HTTP_400_BAD_REQUEST
             return Response(feedback)
+
+class PostCreateApi(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        # user = User.objects.get(id=request.user.id)
+        post = Posts()
+        post.user = request.user
+        post.text = request.data['text']
+        post.save()
+        return Response("Success")

@@ -19,7 +19,7 @@
             <div class="neuEffectNonHover">
                 <div class="row">
                     <div class="" ><h2 class="" ><strong id="std_or_teach">Students</strong></h2></div>
-                    <div class="col" ><a href="/students/student_list/" class="btn btn-md neuEffect me-5 active" style="float: right"><strong>See all..</strong></a></div>
+                    <div class="col" ><a href="/students/student_list/" id="see_all_btn" class="btn btn-md neuEffect me-5 active" style="float: right"><strong>See all..</strong></a></div>
                 </div>
 
                 <div class="col m-3 mx-auto" id="studentCard" style="max-width: 80%;">
@@ -90,10 +90,12 @@
 
         if(x.account_type == 'Student'){
             $('#std_or_teach').html('Student')
+            $('#see_all_btn').attr('href', '/students/student_list/')
             list_api_url = "http://127.0.0.1:8000/students/student_list_api/"
         }
         else if(x.account_type == 'Teacher'){
             $('#std_or_teach').html('Teacher')
+            $('#see_all_btn').attr('href', '/teachers/teacher_list/')
             list_api_url = "http://127.0.0.1:8000/teachers/teacher_list_api/"
         }
 
