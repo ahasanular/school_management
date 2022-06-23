@@ -79,25 +79,33 @@ WSGI_APPLICATION = 'schoolManagement.wsgi.application'
 # }
 
 
+# This is for use Postgres Database
+
+import dj_database_url
+DATABASES = {
+    'default' : dj_database_url.config(conn_max_age=600, ssl_require=True)
+}
+
+
 # This is for use Mysql Database
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'school',
-        'USER': 'root',
-        'PASSWORD': 'Ar@fath21',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-            'isolation_level': 'repeatable read',
-        },
-        'CHARSET': 'utf8',
-        'COLLATION': 'utf8_general_ci',
-        'COLLATION_CONNECTION': 'utf8_general_ci'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'school',
+#         'USER': 'root',
+#         'PASSWORD': 'Ar@fath21',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'sql_mode': 'traditional',
+#             'isolation_level': 'repeatable read',
+#         },
+#         'CHARSET': 'utf8',
+#         'COLLATION': 'utf8_general_ci',
+#         'COLLATION_CONNECTION': 'utf8_general_ci'
+#     }
+# }
 
 # This is for use Mongo atlas Database
 
