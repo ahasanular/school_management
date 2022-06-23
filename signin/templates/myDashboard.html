@@ -21,11 +21,11 @@
 
         input_data = {}
         input_data['account_type'] = localStorage.getItem('account_type')
-        var api_url = "http://127.0.0.1:8000/sign_in/my_account_api/" + x.fullname + "/"
+        var api_url = "/sign_in/my_account_api/" + x.fullname + "/"
 
         $.ajax({
             type: "GET",
-            url: "http://127.0.0.1:8000/sign_in/my_account_api/" + x.fullname + "/",
+            url: "/sign_in/my_account_api/" + x.fullname + "/",
             headers: {Authorization : 'Bearer ' + x.token},
             data: "",
             success: function(data){

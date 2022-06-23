@@ -21,7 +21,7 @@
 
         $.ajax({
             type: "GET",
-            url: "http://127.0.0.1:8000/facilities/facility_list_api/",
+            url: "/facilities/facility_list_api/",
             headers: {Authorization: 'Bearer ' + x.token},
             data: "",
             success: function(data) {

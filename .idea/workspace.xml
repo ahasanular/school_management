@@ -6,8 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="119fe300-9393-4932-a79e-454b9af22f08" name="Changes" comment="bug fexed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schoolManagement/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/schoolManagement/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facilities/templates/facilityDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/facilities/templates/facilityDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facilities/templates/facilityList.html" beforeDir="false" afterPath="$PROJECT_DIR$/facilities/templates/facilityList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/home/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/home/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/posts/templates/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts/templates/posts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signin/templates/myDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/signin/templates/myDashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signin/templates/signIn.html" beforeDir="false" afterPath="$PROJECT_DIR$/signin/templates/signIn.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signup/templates/signUp.html" beforeDir="false" afterPath="$PROJECT_DIR$/signup/templates/signUp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signup/templates/signUpArchived.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/signup/templates/signUpJahangir.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/signup/templates/verification.html" beforeDir="false" afterPath="$PROJECT_DIR$/signup/templates/verification.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/templates/studentDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/students/templates/studentDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/students/templates/studentList.html" beforeDir="false" afterPath="$PROJECT_DIR$/students/templates/studentList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teachers/templates/teacherDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/teachers/templates/teacherDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teachers/templates/teacherList.html" beforeDir="false" afterPath="$PROJECT_DIR$/teachers/templates/teacherList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layout/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout/footer.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -21,7 +21,7 @@
                 .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
 
     var path = window.location.pathname.split('/')
-    var url = "http://127.0.0.1:8000/teachers/teacher_details_api/"+path[3]+"/"
+    var url = "/teachers/teacher_details_api/"+path[3]+"/"
     $.ajax({
             type: "GET",
             url: url,

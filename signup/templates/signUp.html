@@ -165,7 +165,7 @@
                     async: false,
                     cache: false,
                     contentType: false,
-                    url: "http://127.0.0.1:8000/sign_up/sign_up_api/",
+                    url: "/sign_up/sign_up_api/",
                     data: input_data,
                     success: function(data){
                         console.log("checking Api Success")
@@ -219,7 +219,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8000/sign_up/send_verification_api/",
+                url: "/sign_up/send_verification_api/",
                 data: JSON.stringify(input_data),
                 headers: {"X-CSRFToken": '{{csrf_token}}'},
                 success: function(data){

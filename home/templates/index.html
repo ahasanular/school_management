@@ -52,7 +52,7 @@
 
         $.ajax({
             type: "GET",
-            url: "http://127.0.0.1:8000/posts/post_list_api/",
+            url: "/posts/post_list_api/",
             headers: {Authorization: 'Bearer ' + x.token},
             data: "",
             success: function(data){
@@ -86,17 +86,17 @@
 
 <!--        making student or teacher card in homepage-->
 
-        let list_api_url = "http://127.0.0.1:8000/students/student_list_api/";
+        let list_api_url = "/students/student_list_api/";
 
         if(x.account_type == 'Student'){
             $('#std_or_teach').html('Student')
             $('#see_all_btn').attr('href', '/students/student_list/')
-            list_api_url = "http://127.0.0.1:8000/students/student_list_api/"
+            list_api_url = "/students/student_list_api/"
         }
         else if(x.account_type == 'Teacher'){
             $('#std_or_teach').html('Teacher')
             $('#see_all_btn').attr('href', '/teachers/teacher_list/')
-            list_api_url = "http://127.0.0.1:8000/teachers/teacher_list_api/"
+            list_api_url = "/teachers/teacher_list_api/"
         }
 
         $.ajax({
@@ -134,7 +134,7 @@
 
         $.ajax({
             type: "GET",
-            url: "http://127.0.0.1:8000/facilities/facility_list_api/",
+            url: "/facilities/facility_list_api/",
             headers: {Authorization: 'Bearer ' + x.token},
             data: "",
             success: function(data){

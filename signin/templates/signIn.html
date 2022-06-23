@@ -35,7 +35,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8000/sign_in_api/",
+                url: "/sign_in_api/",
                 data: JSON.stringify(input_data),
                 headers: {"X-CSRFToken": '{{csrf_token}}'},
                 success: function(data){
@@ -57,12 +57,12 @@
                         // alert("Now something coming up")
                         // alert(x.fullname)
 
-                        if(localStorage.getItem('lastUrl') != null && localStorage.getItem('lastUrl') != "http://127.0.0.1:8000/sign_in/" && localStorage.getItem('lastUrl') != "http://127.0.0.1:8000/sign_up/"){
+                        if(localStorage.getItem('lastUrl') != null && localStorage.getItem('lastUrl') != "/sign_in/" && localStorage.getItem('lastUrl') != "/sign_up/"){
                             window.location = localStorage.getItem('lastUrl')
                             localStorage.removeItem('lastUrl')
                         }
                         else{
-                            window.location = "http://127.0.0.1:8000/"
+                            window.location = "/"
                         }
                     }
                     else{
