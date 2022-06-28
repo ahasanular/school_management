@@ -70,6 +70,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'schoolManagement.wsgi.application'
 
 
+# This is for use SQLite Database
 
 # DATABASES = {
 #     'default': {
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'schoolManagement.wsgi.application'
 # }
 
 
-# This is for use Postgres Database
+# This is for use Postgres Database on heroku
 
 import dj_database_url
 DATABASES = {
@@ -87,7 +88,7 @@ DATABASES = {
 }
 
 
-# This is for use Mysql Database
+# This is for use Mysql Database for local changes
 
 # DATABASES = {
 #     'default': {

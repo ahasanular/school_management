@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="119fe300-9393-4932-a79e-454b9af22f08" name="Changes" comment="bug fexed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/home/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/home/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schoolManagement/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/schoolManagement/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teachers/templates/teacherDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/teachers/templates/teacherDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teachers/templates/teacherList.html" beforeDir="false" afterPath="$PROJECT_DIR$/teachers/templates/teacherList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout/header.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
