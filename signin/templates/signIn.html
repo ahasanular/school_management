@@ -54,9 +54,6 @@
                                   .map(cookie => cookie.split('='))
                                   .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
 
-                        // alert("Now something coming up")
-                        // alert(x.fullname)
-
                         if(localStorage.getItem('lastUrl') != null && localStorage.getItem('lastUrl') != "/sign_in/" && localStorage.getItem('lastUrl') != "/sign_up/"){
                             window.location = localStorage.getItem('lastUrl')
                             localStorage.removeItem('lastUrl')
@@ -73,7 +70,11 @@
                 error: function(data){
                     console.log("error checking")
                     console.log(data)
-                    $('#card').html('<h1 class="m-5" style="color: tomato;">Something Went Wrong! <br> Please Try Again</h1>')
+                    $('#feedback').html(`
+                        <h1>Sorry for inconvenience!</h1>
+                        <h2>Something went wrong!</h2>
+                        <h3>Working on this</h3>
+                    `)
                 }
             });
 

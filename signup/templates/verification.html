@@ -24,24 +24,15 @@
 
             api_url = "/sign_up/otp_check_api/"
 
-            console.log("Going To")
-            console.log(api_url)
-
             $.ajax({
                 type: "PUT",
                 url: api_url,
                 data: JSON.stringify(input_data),
                 success: function(data){
-                    console.log("Checking Api success")
-                    console.log(data)
                     if(data.status == 200){
-                        console.log("success")
-                        console.log(data)
                         window.location.href = '/sign_in/'
                     }
                     else{
-                        console.log("Final Error")
-                        console.log(data)
                         $('#otp-feedback').html(data.message)
                     }
                 },

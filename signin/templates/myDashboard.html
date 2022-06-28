@@ -7,6 +7,7 @@
 <h1 class="m-5">My Dashboard</h1>
 
 <div class="neuEffect mx-auto p-2" id="card" style="max-width: 50%">
+    <div id="feedback"></div>
 
 </div>
 
@@ -51,17 +52,27 @@
                     `)
                 }
                 else if(data.status == 400){
-                    console.log("Error Into success")
-                    console.log(data)
+                    // console.log("Error Into success")
+                    // console.log(data)
+                    $('#feedback').html(`<h2><strong>${data.message}</strong></h2>`)
                 }
 
             },
             error: function(data){
-                //console.log(data)
-                $('#card').html(`
-                        <h1>Please Sign In To View Any Info</h1>
-                        <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                console.log("error checking")
+                console.log(data)
+                if(data.status == 401){
+                    $('#modal_feedback').html(`
+                        <h3>You need to sign_in to use that feature</h3>
                     `)
+                }
+                else{
+                    $('#modal_feedback').html(`
+                        <h1>Sorry for inconvenience!</h1>
+                        <h2>Something went wrong!</h2>
+                        <h3>Working on this</h3>
+                    `)
+                }
                 $('#card').removeClass('neuEffect')
             }
         });

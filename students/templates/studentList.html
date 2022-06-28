@@ -44,9 +44,8 @@
                 }
             },
             error: function(data){
-                //console.log("Error checking")
-                //console.log(data)
-                //console.log(localStorage.getItem('token'))
+                console.log("Error checking")
+                console.log(data)
                 $('#card').html(`
                     <h1>Please Sign In from a student account to view Student Info</h1>
                     <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>

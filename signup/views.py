@@ -78,37 +78,26 @@ class SignUp(CreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             data = request.data
-            print("data['full_name']")
-            print(data['full_name'])
+
             if 'account_type' not in data or data['account_type'] == '':
-                result = {}
-                result['status'] = HTTP_400_BAD_REQUEST
-                result['message'] = "No account type found !"
+                result = {'status': HTTP_400_BAD_REQUEST, 'message': "No account type found !"}
                 return Response(result)
             if 'full_name' not in data or data['full_name'] == '':
-                result = {}
-                result['status'] = HTTP_400_BAD_REQUEST
-                result['message'] = "Full name can't be NULL"
+                result = {'status': HTTP_400_BAD_REQUEST, 'message': "Full name can't be NULL"}
                 return Response(result)
             if 'email' not in data or data['email'] == '':
-                result = {}
-                result['status'] = HTTP_400_BAD_REQUEST
-                result['message'] = "Email can't be NULL"
+                result = {'status': HTTP_400_BAD_REQUEST, 'message': "Email can't be NULL"}
                 return Response(result)
             if 'phone' not in data or data['phone'] == '':
-                result = {}
-                result['status'] = HTTP_400_BAD_REQUEST
-                result['message'] = "Phone can't be NULL"
+                result = {'status': HTTP_400_BAD_REQUEST, 'message': "Phone can't be NULL"}
                 return Response(result)
             if 'password' not in data or data['password'] == '':
-                result = {}
-                result['status'] = HTTP_400_BAD_REQUEST
-                result['message'] = "Password can't be NULL"
+                result = {'status': HTTP_400_BAD_REQUEST, 'message': "Password can't be NULL"}
                 return Response(result)
 
             username = data['email'].split('@')
 
-            user = User.objects.filter(username=username[0]).first()
+            user = User.objects.filter(email=data['email']).first()
 
             if not user:
                 user = User()
@@ -121,11 +110,9 @@ class SignUp(CreateAPIView):
                     user.last_name = name
                 user.email = data['email']
                 user.password = make_password(data['password'])
+                # user.is_active = False
 
                 otp = secrets.token_hex(50)
-
-                print("PersonChecking")
-                print(data['account_type'])
 
                 if data['account_type'] == 'Student':
                     person_obj = Student()
@@ -150,9 +137,7 @@ class SignUp(CreateAPIView):
                 person_obj.blood_group = data['blood_group']
                 person_obj.otp = otp
                 if 'profile_photo' not in data or data['profile_photo'] == '' or not request.FILES['profile_photo']:
-                    result = {}
-                    result['status'] = HTTP_400_BAD_REQUEST
-                    result['message'] = "Photo Not found"
+                    result = {'status': HTTP_400_BAD_REQUEST, 'message': "Photo Not found"}
                     return Response(result)
                 else:
                     person_obj.img = data['profile_photo']
@@ -162,14 +147,12 @@ class SignUp(CreateAPIView):
                 user.save()
                 person_obj.save()
 
-                server_root = "http://127.0.0.1:8000/sign_up/verification/" + data['account_type'] + "/"
-                activition_link = server_root + data['email'] + "/" + otp + "/"
+                # server_root = "http://127.0.0.1:8000/sign_up/verification/" + data['account_type'] + "/"
+                # activition_link = server_root + data['email'] + "/" + otp + "/"
 
                 # send_email_thread(data['email'], "Verification for " + data['account_type'] + " Sign Up", "To confirm your mail and activate your account please click in this LINK : " + activition_link)
 
-                result = {}
-                result['status'] = HTTP_200_OK
-                result['messege'] = "Success"
+                result = {'status': HTTP_200_OK, 'messege': "Success"}
                 return Response(result)
             else:
                 if user.is_active:

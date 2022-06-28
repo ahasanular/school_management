@@ -167,16 +167,16 @@
 
         $('#post_form').submit(function(event){
             event.preventDefault()
-            console.log(event)
+            // console.log(event)
             var data_str = new FormData(document.getElementById('post_form'));
             data_str.append('account_type', x.account_type)
-            console.log("data_str")
-            console.log(data_str.value)
+            // console.log("data_str")
+            // console.log(data_str.value)
             var image = document.forms["post_form"]["post_picture"].value;
-            console.log(image)
+            // console.log(image)
             image = image.split('.')
             //if(image[(image.length)-1] === 'jpg'){
-                console.log("Test")
+                // console.log("Test")
                 $.ajax({
                     type: "POST",
                     headers: {Authorization: 'Bearer ' + x.token},
@@ -188,8 +188,8 @@
                     url: "/posts/create_post_api/",
                     data: data_str,
                     success: function(data){
-                        console.log("Success checking")
-                        console.log(data)
+                        // console.log("Success checking")
+                        // console.log(data)
                         window.location.href = '/posts/'
                     },
                     error: function(data){
@@ -202,11 +202,10 @@
 
 
         function count_like(the_post){
-            // alert("click")
             input_data = {}
             input_data['id'] = the_post.id
-            console.log("like print from web")
-            console.log(input_data)
+            // console.log("like print from web")
+            // console.log(input_data)
 
             $.ajax({
                 type: "POST",
@@ -215,8 +214,8 @@
                 data: JSON.stringify(input_data),
                 success: function(data){
                     if(data.status == 200){
-                        console.log("Success checking likes")
-                        console.log(data)
+                        // console.log("Success checking likes")
+                        // console.log(data)
                         id = '#'+data.id
                         $(id).attr('onclick', '')
                         $(id).css('background-color', '#c3c7cb')

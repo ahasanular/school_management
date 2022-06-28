@@ -5,6 +5,7 @@
 {% block body %}
 
 <div class="neuEffectNonHover justify-content-center mx-auto" style="max-width: 85%" id="card">
+    <h1 id="feedback" class="m-5 pt-5" style="color: tomato;"></h1>
     <div class="col justify-content-center" style="text-align: center;">
         <form enctype="multipart/form-data" id="sign_up_form" method="POST" action="#">
             {% csrf_token %}
@@ -141,22 +142,22 @@
         $('#create-acc').prop('disabled', true)
 
         function createButton(person){
-            console.log(person)
+            // console.log(person)
             $('#create-acc').attr('value', 'Sign Up as ' + person.value)
             $('#create-acc').prop('disabled', false)
         }
 
         $('#sign_up_form').submit(function(event){
             event.preventDefault()
-            console.log(event)
+            // console.log(event)
             let input_data = new FormData(document.getElementById('sign_up_form'));
             let input_image = document.forms["sign_up_form"]["profile_photo"].value;
-            console.log(input_image)
-            console.log("input data showing")
-            console.log(input_data)
+            // console.log(input_image)
+            // console.log("input data showing")
+            // console.log(input_data)
             input_image = input_image.split('.')
             if(input_image[input_image.length - 1] == "jpg" || input_image[input_image.length - 1] == "jpeg" || input_image[input_image.length - 1] == "png"){
-                console.log("Test")
+                // console.log("Test")
                 $.ajax({
                     type: "POST",
                     headers: {"X-CSRFToken": '{{csrf_token}}'},
@@ -168,18 +169,17 @@
                     url: "/sign_up/sign_up_api/",
                     data: input_data,
                     success: function(data){
-                        console.log("checking Api Success")
-                        console.log(data)
+                        // console.log("checking Api Success")
+                        // console.log(data)
                         if(data.status == 200){
                             $('#card').html(`
                                 <br>
-                                <h3 class="mt-3">Please Check Your Mail for verification</h3>
-                                <h4 class="m-5"> NOTE : Please Check SPAM folder of your mail In case if It's got recognise as spam</h3>
+                                <h3 class="mt-3">Account Creation successful</h3>
+                                <h4 class="m-5"> You can now sign in using your credential</h3>
+                                <a class="btn btn-lg neuEffect" href="/sign_in/">Sign In Page</a>
                             `)
-
                             localStorage.removeItem('localEmail')
                             localStorage.removeItem('account_type')
-                            window.location = "/sign_in/"
                         }
                         else if(data.status == 208){
                             $('#card').html(`
@@ -191,19 +191,15 @@
                             localStorage.removeItem('localEmail')
                             localStorage.removeItem('account_type')
                         }
-                        else if(data.status == 401){
-                            $('#card').html(`
-                                <br>
-                                <h3 class="mt-3">Heads Up!<br>An Unactivated account Found with this Email</h3>
-                                <h4 class="m-5"> You can verify now</h3>
-                                <button class="btn btn-lg neuEffect" onclick="send_verification_link(${ data.email })" id="verification_link">Send verification link</button>
-                            `)
-                            //$('#verification_link').attr('onclick', `onclick="send_verification_link(${localStorage.getItem('localEmail')},${localStorage.getItem('account_type')})`)
-                        }
                     },
                     error: function(data){
-                        console.log("checking Error")
+                        console.log("error checking")
                         console.log(data)
+                        $('#feedback').html(`
+                            <h1>Sorry for inconvenience!</h1>
+                            <h2>Something went wrong!</h2>
+                            <h3>Working on this</h3>
+                        `)
                     }
                 });
             }

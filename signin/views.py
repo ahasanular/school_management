@@ -3,14 +3,26 @@ from students.models import Student
 from teachers.models import Teacher
 from students.serializers import StudentDetailsSerializer
 from teachers.serializers import TeacherDetailsSerializer
+from django.http import HttpResponseRedirect
+from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.response import Response
+from rest_framework.utils import json
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+# end of import
 
-def SignIn(request):
+
+def sign_in(request):
     return render(request, 'signIn.html')
 
-def myDashboard(request):
+
+def my_dashboard(request):
     return render(request, 'myDashboard.html')
 
-from django.http import HttpResponseRedirect
 
 def log_out(request):
     response = HttpResponseRedirect('/')
@@ -23,30 +35,19 @@ def log_out(request):
 
 
 # sign in api
-from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework.response import Response
-from rest_framework.utils import json
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password
-
-from rest_framework_simplejwt.tokens import RefreshToken
 
 class SignInApi(CreateAPIView):
     permission_classes = []
+
     def post(self, request, *args, **kwargs):
         try:
             data = json.loads(request.body)
             if 'email' not in data or data['email'] == '':
-                feedback = {}
-                feedback['status'] = HTTP_400_BAD_REQUEST
-                feedback['message'] = "Email field Cannot be null"
+                feedback = {'status': HTTP_400_BAD_REQUEST, 'message': "Email field Cannot be null"}
                 return Response(feedback)
 
             if 'password' not in data or data['password'] == '':
-                feedback = {}
-                feedback['status'] = HTTP_400_BAD_REQUEST
-                feedback['message'] = "Password field Cannot be null"
+                feedback = {'status': HTTP_400_BAD_REQUEST, 'message': "Password field Cannot be null"}
                 return Response(feedback)
 
             from django.db.models import Q
@@ -65,58 +66,47 @@ class SignInApi(CreateAPIView):
                 user = User.objects.filter(username=data['email']).first()
 
             if not user or user == '':
-                feedback = {}
-                feedback['status'] = HTTP_400_BAD_REQUEST
-                feedback['message'] = "No Account with this User"
+                feedback = {'status': HTTP_400_BAD_REQUEST, 'message': "No Account with this User"}
                 return Response(feedback)
             elif not user.is_active:
-                feedback = {}
-                feedback['status'] = HTTP_400_BAD_REQUEST
-                feedback['message'] = "Active you Account first"
+                feedback = {'status': HTTP_400_BAD_REQUEST, 'message': "Active you Account first"}
                 return Response(feedback)
             else:
                 if not check_password(data['password'],user.password):
-                    feedback = {}
-                    feedback['status'] = HTTP_401_UNAUTHORIZED
-                    feedback['message'] = "Invalid Credentials"
+                    feedback = {'status': HTTP_401_UNAUTHORIZED, 'message': "Invalid Credentials"}
                     return Response(feedback)
                 else:
                     student = Student.objects.filter(email=user.email).first()
                     teacher = Teacher.objects.filter(email=user.email).first()
 
                     if teacher:
-                        userObject = teacher
+                        user_object = teacher
                         account_type = 'Teacher'
                     elif student:
-                        userObject = student
+                        user_object = student
                         account_type = 'Student'
 
                     token = RefreshToken.for_user(user)
+
                     feedback = {}
-                    feedback['status']=HTTP_200_OK
-                    feedback['user_name']=user.username
-                    feedback['full_name']=userObject.full_name
-                    feedback['account_type']=account_type
-                    feedback['img']=str(userObject.img.url)
-                    feedback['access']=str(token.access_token)
-                    feedback['refresh']=str(token)
-                    print(feedback)
+                    feedback['status'] = HTTP_200_OK
+                    feedback['user_name'] = user.username
+                    feedback['full_name'] = user_object.full_name
+                    feedback['account_type'] = account_type
+                    feedback['img'] = str(user_object.img.url)
+                    feedback['access'] = str(token.access_token)
+                    feedback['refresh'] = str(token)
                     return Response(feedback)
 
         except Exception as ex:
-            feedback = {}
-            feedback['status'] = HTTP_400_BAD_REQUEST
-            feedback['message'] = str(ex)
+            feedback = {'status': HTTP_400_BAD_REQUEST, 'message': str(ex)}
             return Response(feedback)
-
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 
 class MyDashboard(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, name):
         try:
             student = Student.objects.filter(full_name=name).first()
@@ -131,8 +121,6 @@ class MyDashboard(ListAPIView):
                 return Response(data)
 
         except Exception as ex:
-            feedback = {}
-            feedback['message'] = str(ex)
-            feedback['status'] = HTTP_400_BAD_REQUEST
+            feedback = {'message': str(ex), 'status': HTTP_400_BAD_REQUEST}
             return Response(feedback)
 
