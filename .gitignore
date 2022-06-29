@@ -3,3 +3,9 @@
 /env
 /env/
 *.sqlite3
+
+teachers/__pycache__/
+students/__pycache__/
+/__pycache__/
+__pycache__/
+__pycache__
