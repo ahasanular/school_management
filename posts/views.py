@@ -82,7 +82,7 @@ class PostList(ListAPIView):
             user = request.user
             # data = Posts.objects.filter().annotate(image_student=F('student__img')).annotate(image_teacher=F(
             # 'teacher__img')).all() this is comment
-            data = Posts.objects.filter().prefetch_related(Prefetch("post_like", PostLikes.objects.filter(user=user).all())).annotate(total_likes=Count("post_like")).all().order_by('created_at')
+            data = Posts.objects.filter().prefetch_related(Prefetch("post_like", PostLikes.objects.filter(user=user).all())).annotate(total_likes=Count("post_like")).all().order_by('-created_at')
             data = PostsSerializer(data, many=True).data
             return Response(data)
         except Exception as ex:
