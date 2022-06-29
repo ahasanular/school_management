@@ -6,17 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="119fe300-9393-4932-a79e-454b9af22f08" name="Changes" comment="bug fexed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/posts/templates/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts/templates/posts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signin/templates/myDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/signin/templates/myDashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signin/templates/signIn.html" beforeDir="false" afterPath="$PROJECT_DIR$/signin/templates/signIn.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/signin/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signin/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/signin/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signup/templates/signUp.html" beforeDir="false" afterPath="$PROJECT_DIR$/signup/templates/signUp.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signup/templates/verification.html" beforeDir="false" afterPath="$PROJECT_DIR$/signup/templates/verification.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signup/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/signup/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signup/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/signup/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/students/templates/studentList.html" beforeDir="false" afterPath="$PROJECT_DIR$/students/templates/studentList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teachers/templates/teacherDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/teachers/templates/teacherDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teachers/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/teachers/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

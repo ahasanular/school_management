@@ -39,7 +39,7 @@ class TeacherList(ListAPIView):
 
 
 class TeacherDetails(ListAPIView):
-    permission_classes = [IsTeacher]
+    permission_classes = []
     def get(self, request, slug):
         data = Teacher.objects.filter(slug=slug).first()
         data = TeacherDetailsSerializer(data).data
