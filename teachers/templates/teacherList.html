@@ -67,11 +67,22 @@
                 //console.log(data)
             },
             error:function(data){
-                //console.log(data)
-                $('#card').html(`
-                    <h1>Please Sign In from a Teacher account to view Student Info</h1>
-                    <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
-                `)
+                console.log("Error Checking")
+                console.log(data)
+                if(data.status == 401 | data.status == 403){
+                    $('#card').html(`
+                        <h1>Please Sign In from a Teacher account to view teacher Info</h1>
+                        <a id="signIn" onclick="lastUrlGet()" class="btn neuEffect btn-lg mx-auto" style="max-width: 15%;" href="/sign_in/" >Sign In</a>
+                    `)
+                }
+                else{
+                    $('#card').html(`
+                        <h1>Sorry for inconvenience!</h1>
+                        <h2>Something went wrong!</h2>
+                        <h3>Working on this</h3>
+                    `)
+                }
+                $('#card').removeClass('neuEffect')
             }
         });
 
