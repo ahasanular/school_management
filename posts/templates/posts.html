@@ -63,8 +63,9 @@
             var isPM = "AM";
             var account_type;
 
-            for(var i = 0; i < data.length; i++){
+            for(var i = 0; i < data.length - 1; i++){
                 if (data[i].text == null){data[i].text = ''}
+
                 if(data[i].student != null ){
                     post_by_img = data[i].student.img
                     account_type = 'students'
